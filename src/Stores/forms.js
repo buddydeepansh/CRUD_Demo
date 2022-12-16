@@ -11,6 +11,8 @@ class FormStore {
   setDevice = (data) => {
     this.device = data;
   };
-  setuserData = ()
+  setuserData = (data) => {
+    this.data = data
+  }
 }
 export default new FormStore();
