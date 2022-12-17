@@ -6,50 +6,63 @@ import FormStore from "../../Stores/forms";
 import "./FormModal.css";
 
 const FormModal = observer(() => {
-  useEffect(() => {
-    console.log(JSON.stringify(FormStore.userData));
-  }, []);
   const [error, seterror] = useState(false);
   const [errMsg, seterrMsg] = useState("Enter valid data.");
-  const userData = {
-    id: "",
-    first_name: "",
-    last_name: "",
-    email: "",
-  };
   const handleClose = () => {
     FormStore.setformModal(false);
   };
   const AddUserData = (e) => {
     e.preventDefault();
     if (
-      userData.id === "" ||
-      userData.first_name === "" ||
-      userData.last_name === "" ||
-      userData.email === ""
+      FormStore.id === "" ||
+      FormStore.first_name === "" ||
+      FormStore.last_name === "" ||
+      FormStore.email === ""
     ) {
       seterrMsg("Please enter all fields");
       seterror(true);
     } else {
-      seterror(false);
-      FormStore.setformModal(false);
-      let dataObj = FormStore.userData;
-      dataObj.push(userData);
-      FormStore.setuserData(dataObj);
-      localStorage.setItem("userdata", JSON.stringify(FormStore.userData));
+      let uniqueId = true;
+      // eslint-disable-next-line array-callback-return
+      FormStore.userData.map((x) => {
+        console.log(x.id);
+        // eslint-disable-next-line eqeqeq
+        if (x.id == FormStore.id) {
+          seterrMsg("Unique id should be there. Id already exists.");
+          seterror(true);
+          uniqueId = false;
+        }
+      });
+      if (uniqueId) {
+        seterror(false);
+        FormStore.setformModal(false);
+        let dataObj = FormStore.userData;
+        dataObj.push({
+          id: FormStore.id,
+          first_name: FormStore.first_name,
+          last_name: FormStore.last_name,
+          email: FormStore.email,
+        });
+        FormStore.setuserData(dataObj);
+        localStorage.setItem("userdata", JSON.stringify(FormStore.userData));
+        FormStore.setId("");
+        FormStore.setfname("");
+        FormStore.setlname("");
+        FormStore.setemail("");
+      }
     }
   };
   const handleIdChange = (e) => {
-    userData.id = e.target.value;
+    FormStore.setId(e.target.value);
   };
   const handlefnameChange = (e) => {
-    userData.first_name = e.target.value;
+    FormStore.setfname(e.target.value);
   };
   const handlelnameChange = (e) => {
-    userData.last_name = e.target.value;
+    FormStore.setlname(e.target.value);
   };
   const handleemailChange = (e) => {
-    userData.email = e.target.value;
+    FormStore.setemail(e.target.value);
   };
 
   return (

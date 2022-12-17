@@ -39,7 +39,7 @@ const DataTable = observer(() => {
   };
   useEffect(() => {
     getData();
-  });
+  }, []);
   return (
     <>
       {/* <div><button type="button" onClick={()=>handleAdd()}>Add Details</button></div> */}

@@ -4,6 +4,10 @@ class FormStore {
   device = 1;
   formModal = false;
   userData = [];
+  id = "";
+  first_name = "";
+  last_name = "";
+  email = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -18,6 +22,18 @@ class FormStore {
   };
   setformModal = (data) => {
     this.formModal = data;
+  };
+  setId = (data) => {
+    this.id = data;
+  };
+  setfname = (data) => {
+    this.first_name = data;
+  };
+  setlname = (data) => {
+    this.last_name = data;
+  };
+  setemail = (data) => {
+    this.email = data;
   };
 }
 export default new FormStore();
