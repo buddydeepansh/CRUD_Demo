@@ -2,7 +2,8 @@ import { makeAutoObservable } from "mobx";
 
 class FormStore {
   device = 1;
-  userData = {}
+  formModal = false;
+  userData = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -12,7 +13,11 @@ class FormStore {
     this.device = data;
   };
   setuserData = (data) => {
-    this.data = data
-  }
+    this.userData = data;
+    // console.log(Object.assign({}, this.userData[0]));
+  };
+  setformModal = (data) => {
+    this.formModal = data;
+  };
 }
 export default new FormStore();

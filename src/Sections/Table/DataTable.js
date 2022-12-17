@@ -7,18 +7,35 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
+import FormStore from "../../Stores/forms";
 
 const DataTable = observer(() => {
   const [rows, setRows] = React.useState([]);
   const getData = async () => {
-    const apiURL = "https://reqres.in/api/users?page=1";
-    let dataObj = await fetch(apiURL).then((res) => res.json());
-    console.log("apiURL", dataObj.data);
-    dataObj.data.map((x, i) => {
-      return setRows((prev) => {
-        return [...prev, x];
+    let localData;
+    try {
+      localData = localStorage.getItem("userdata");
+      localData = JSON.parse(localData);
+    } catch (e) {
+      localData = null;
+    }
+    if (localData !== null) {
+      FormStore.setuserData(localData);
+      console.log(rows);
+    } else {
+      const apiURL = "https://reqres.in/api/users";
+      let dataObj = await fetch(apiURL)
+        .then((res) => res.json())
+        .then((result) => {
+          return result.data;
+        });
+      dataObj.map((x, i) => {
+        return setRows((prev) => {
+          return [...prev, JSON.parse(JSON.stringify(x))];
+        });
       });
-    });
+      FormStore.setuserData(JSON.parse(JSON.stringify(dataObj)));
+    }
   };
   useEffect(() => {
     getData();
@@ -30,29 +47,24 @@ const DataTable = observer(() => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Employee Id</TableCell>
-              <TableCell align="right">Email</TableCell>
-              <TableCell align="right">First Name</TableCell>
-              <TableCell align="right">Last Name</TableCell>
-              <TableCell align="right">Profile Photo</TableCell>
+              <TableCell align="center">Employee Id</TableCell>
+              <TableCell align="center">Email</TableCell>
+              <TableCell align="center">First Name</TableCell>
+              <TableCell align="center">Last Name</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {FormStore.userData.map((row) => (
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell align="center" component="th" scope="row">
                   {row.id}
                 </TableCell>
-                <TableCell align="right">{row.email}</TableCell>
-                <TableCell align="right">{row.first_name}</TableCell>
-                <TableCell align="right">{row.last_name}</TableCell>
-                <TableCell align="right">
-                  {" "}
-                  <img src={row.avatar} alt="" />
-                </TableCell>
+                <TableCell align="center">{row.email}</TableCell>
+                <TableCell align="center">{row.first_name}</TableCell>
+                <TableCell align="center">{row.last_name}</TableCell>
               </TableRow>
             ))}
           </TableBody>
