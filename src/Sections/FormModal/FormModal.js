@@ -1,7 +1,7 @@
 import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
 import { observer } from "mobx-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FormStore from "../../Stores/forms";
 import "./FormModal.css";
 
