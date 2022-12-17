@@ -1,4 +1,3 @@
-import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import TextField from "@mui/material/TextField";
 import { observer } from "mobx-react";
